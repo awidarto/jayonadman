@@ -642,8 +642,12 @@ class AssetController extends AdminController {
                     }
                 }
             }
-
-            $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+            if(isset($data['useImage']) && $data['useImage'] == 'linked'){
+                $thumbnail_url = $data['extImageURL'];
+                $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+            }else{
+                $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+            }
             return $display;
         }else{
             return $data['SKU'];
