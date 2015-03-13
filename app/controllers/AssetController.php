@@ -211,6 +211,7 @@ class AssetController extends AdminController {
             array('Description',array('search'=>true,'sort'=>true)),
             array('Link to URL',array('search'=>true,'sort'=>true)),
             array('Tags',array('search'=>true,'sort'=>true)),
+            array('Stats',array('search'=>false,'sort'=>false)),
             array('Created',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
         );
@@ -243,6 +244,7 @@ class AssetController extends AdminController {
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('extURL',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
+            array('_id',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'statNumbers')),
             array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -617,6 +619,34 @@ class AssetController extends AdminController {
 
     }
 
+    public function statNumbers($data){
+        $datemonth = date('M Y',time());
+        $firstday = Carbon::parse('first day of '.$datemonth);
+        $lastday = Carbon::parse('last day of '.$datemonth)->addHours(23)->addMinutes(59)->addSeconds(59);
+
+        //print_r($firstday->timestamp);
+        //print_r($lastday->timestamp);
+
+        $qval = array('$gte'=>new MongoDate($firstday->timestamp),'$lte'=>new MongoDate($lastday->timestamp));
+
+        $qc = array();
+
+        $qc['adId'] = $data['_id'];
+
+        $qc['clickedAt'] = $qval;
+
+        $qv = array();
+
+        $qv['adId'] = $data['_id'];
+
+        $qv['viewedAt'] = $qval;
+
+        $clicks = Clicklog::whereRaw($qc)->count();
+
+        $views = Viewlog::whereRaw($qv)->count();
+
+        return $clicks.' clicks<br />'.$views.' views';
+    }
 
     public function namePic($data)
     {
