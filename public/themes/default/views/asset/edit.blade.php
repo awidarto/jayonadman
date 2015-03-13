@@ -46,6 +46,16 @@
 
 
         <h5>Images</h5>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                {{ Former::select('useImage')->label('Image Source')->options(array('linked'=>'Linked Image','upload'=>'Uploaded Image'))->label('Choose whether to use linked of uploaded image') }}
+            </div>
+        </div>
+        <h6>Link to Image</h6>
+        {{ Former::text('extImageURL','External Image URL')->help('Image URL eg: "http://some.domain/image.jpg"') }}
+
+
+        <h6>Upload Image</h6>
         <?php
             $fupload = new Fupload();
         ?>

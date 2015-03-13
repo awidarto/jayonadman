@@ -397,19 +397,32 @@ class AssetController extends AdminController {
 
     public function postAdd($data = null)
     {
-
-        $this->validator = array(
-            'itemDescription' => 'required'
-        );
+        if(isset($data['useImage']) && $data['useImage'] == 'linked'){
+            $this->validator = array(
+                'itemDescription' => 'required',
+                'extImageURL'=>'required'
+            );
+        }else{
+            $this->validator = array(
+                'itemDescription' => 'required'
+            );
+        }
 
         return parent::postAdd($data);
     }
 
     public function postEdit($id,$data = null)
     {
-        $this->validator = array(
-            'itemDescription' => 'required'
-        );
+        if(isset($data['useImage']) && $data['useImage'] == 'linked'){
+            $this->validator = array(
+                'itemDescription' => 'required',
+                'extImageURL'=>'required'
+            );
+        }else{
+            $this->validator = array(
+                'itemDescription' => 'required'
+            );
+        }
 
         $hobj = Asset::find($id)->toArray();
         $hobj['_id'] = new MongoId($id);
