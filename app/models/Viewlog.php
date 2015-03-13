@@ -3,6 +3,6 @@ use Jenssegers\Mongodb\Model as Eloquent;
 
 class Viewlog extends Eloquent {
 
-    protected $collection = 'adviews';
+    protected $collection = 'adview';
 
 }
