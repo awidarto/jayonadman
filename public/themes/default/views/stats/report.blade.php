@@ -180,8 +180,8 @@ select.input-sm {
 
                 $tab_data[] = array(
                         array('value'=>'Total', 'attr'=>'class="left"'),
-                        array('value'=>$tclicks, 'attr'=>'class="left"'),
                         array('value'=>$tviews, 'attr'=>'class="left"'),
+                        array('value'=>$tclicks, 'attr'=>'class="left"'),
                         array('value'=>number_format($tctr, 2), 'attr'=>'class="left"'),
                     );
 
