@@ -70,8 +70,11 @@
                     <i class="fa fa-bar-chart-o"></i> Reports <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="{{ sa('approvalreport') }}" >
-                        <a href="{{ URL::to('approvalreport') }}" class="{{ sa('approvalreport') }}" ><i class="fa fa-check-square-o"></i> Approvals</a>
+                    <li class="{{ sa('stats') }}" >
+                        <a href="{{ URL::to('stats') }}" class="{{ sa('stats') }}" ><i class="fa fa-check-square-o"></i> Global</a>
+                    </li>
+                    <li class="{{ sa('stats/merchant') }}" >
+                        <a href="{{ URL::to('stats/merchant') }}" class="{{ sa('stats/merchant') }}" ><i class="fa fa-check-square-o"></i> By Merchant</a>
                     </li>
                 </ul>
             </li>

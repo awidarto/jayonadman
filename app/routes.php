@@ -26,6 +26,8 @@ Route::controller('scanner', 'ScannerController');
 
 Route::controller('dashboard', 'DashboardController');
 
+Route::controller('stats', 'StatsController');
+
 Route::controller('assettype', 'AssettypeController');
 Route::controller('assetlocation', 'AssetlocationController');
 Route::controller('rack', 'RackController');
