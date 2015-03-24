@@ -153,26 +153,39 @@ select.input-sm {
             <?php
 
                 $tab_data = array();
-                $tcliks = 0;
+                $tclicks = 0;
                 $tviews = 0;
 
                 for( $i = 0; $i < count( $data['labels']); $i++){
+                    if( $data['series01']['data'][$i] > 0 ){
+                        $ctr = ($data['series02']['data'][$i] / $data['series01']['data'][$i]) * 100;
+                    }else{
+                        $ctr = 0;
+                    }
                     $tab_data[] = array(
                             array('value'=>$data['labels'][$i], 'attr'=>'class="left"'),
-                            array('value'=>$data['series01']['data'][$i], 'attr'=>'class="left"'),
-                            array('value'=>$data['series02']['data'][$i], 'attr'=>'class="left"'),
+                            array('value'=>$data['series01']['data'][$i], 'attr'=>'class="right"'),
+                            array('value'=>$data['series02']['data'][$i], 'attr'=>'class="right"'),
+                            array('value'=> number_format($ctr, 2), 'attr'=>'class="left"'),
                         );
-                    $tcliks += $data['series01']['data'][$i];
-                    $tviews += $data['series02']['data'][$i];
+                    $tclicks += $data['series02']['data'][$i];
+                    $tviews += $data['series01']['data'][$i];
+                }
+
+                if( $tviews > 0 ){
+                    $tctr = ($tclicks / $tviews ) * 100;
+                }else{
+                    $tctr = 0;
                 }
 
                 $tab_data[] = array(
                         array('value'=>'Total', 'attr'=>'class="left"'),
-                        array('value'=>$tcliks, 'attr'=>'class="left"'),
+                        array('value'=>$tclicks, 'attr'=>'class="left"'),
                         array('value'=>$tviews, 'attr'=>'class="left"'),
+                        array('value'=>number_format($tctr, 2), 'attr'=>'class="left"'),
                     );
 
-                $header = array('Date', 'Views', 'Clicks');
+                $header = array('Date', 'Views', 'Clicks', 'CTR (%)');
                 $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
                 $t = new HtmlTable($tab_data, $attr, $header);
                 $summarytable = $t->build();
