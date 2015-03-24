@@ -172,7 +172,7 @@ select.input-sm {
                         array('value'=>$tviews, 'attr'=>'class="left"'),
                     );
 
-                $header = array('Date', 'Clicks', 'Views');
+                $header = array('Date', 'Views', 'Clicks');
                 $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
                 $t = new HtmlTable($tab_data, $attr, $header);
                 $summarytable = $t->build();
