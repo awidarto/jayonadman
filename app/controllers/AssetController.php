@@ -292,8 +292,8 @@ class AssetController extends AdminController {
 
                 $mediaindex++;
 
-                $data['defaultpic'] = $data['file_id'][$i];
-                $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
+                $data['defaultpic'] = $data['file_id'][0];
+                $data['defaultpictures'] = $data['files'][$data['file_id'][0]];
 
             }
 
@@ -340,8 +340,8 @@ class AssetController extends AdminController {
 
                 $mediaindex++;
 
-                $data['defaultpic'] = $data['file_id'][$i];
-                $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
+                $data['defaultpic'] = $data['file_id'][0];
+                $data['defaultpictures'] = $data['files'][$data['file_id'][0]];
 
             }
 

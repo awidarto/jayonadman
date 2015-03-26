@@ -3,6 +3,7 @@
 return array(
         'entities'=>array(
                 'asset',
+                'advertiser',
                 'location',
                 'rack',
                 'approval',

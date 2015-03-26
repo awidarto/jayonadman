@@ -13,6 +13,8 @@
 Route::controller('user', 'UserController');
 Route::controller('usergroup', 'UsergroupController');
 
+Route::controller('advertiser', 'AdvertiserController');
+
 Route::controller('report', 'ReportController');
 Route::controller('menu', 'MenuController');
 

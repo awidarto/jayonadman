@@ -27,17 +27,28 @@
 
                     @endif
 
-                    @if(Ks::can('view','advertiser'))
-
-                    <li class="{{ sa('advertiser') }}">
-                        <a class="{{ sa('advertiser') }}" href="{{ URL::to('advertiser') }}"  ><i class="fa fa-th-list"></i> Advertiser</a>
-                    </li>
-
-                    @endif
 
                 </ul>
             </li>
             @endif
+
+            @if(Ks::can('view','advertiser'))
+
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">
+                    <i class="fa fa-list"></i> Advertiser <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ sa('advertiser') }}">
+                        <a class="{{ sa('advertiser') }}" href="{{ URL::to('advertiser') }}"  ><i class="fa fa-th-list"></i> Advertiser List</a>
+                    </li>
+                    <li class="{{ sa('shopcategory') }}">
+                        <a class="{{ sa('shopcategory') }}" href="{{ URL::to('shopcategory') }}"  ><i class="fa fa-th-list"></i> Shop Category</a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+
 
             @if(Ks::can('view','log'))
 
