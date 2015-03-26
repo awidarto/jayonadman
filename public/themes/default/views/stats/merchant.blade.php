@@ -14,7 +14,7 @@
     </div>
     <div class="col-md-3">
 
-            {{ Former::select('ad_asset','Ad Asset / Banner')->id('ad_asset')->options( Prefs::ExtractAdAsset( Input::get('merchantId'), true) , Input::get('merchantId') ) }}
+            {{ Former::select('ad_asset','Ad Asset / Banner')->id('ad_asset')->options( Prefs::ExtractAdAsset( Input::get('merchantId'), true) , Input::get('ad_asset') ) }}
 
             {{ Former::select('ad_page','Page Display')->id('ad_page')->options( Prefs::ExtractPages(true) , Input::get('ad_page') ) }}
 
