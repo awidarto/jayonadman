@@ -547,11 +547,11 @@ class AssetController extends AdminController {
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="fa fa-print"></i> Print</a>';
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Upload Picture</span>';
         $inv = '<span class="upinv" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Update Inventory</span>';
-        $edit = '<a href="'.URL::to('stats/asset/'.$data['_id']).'"><i class="fa fa-line-chart"></i> Stats</a>';
+        $stat = '<a href="'.URL::to('stats/asset/'.$data['_id']).'"><i class="fa fa-line-chart"></i> Stats</a>';
 
         $history = '<a href="'.URL::to('asset/history/'.$data['_id']).'"><i class="fa fa-clock-o"></i> History</a>';
 
-        $actions = $edit.'<br />'.$history.'<br />'.$delete;
+        $actions = $stat.'<br />'.$edit.'<br />'.$history.'<br />'.$delete;
         return $actions;
     }
 

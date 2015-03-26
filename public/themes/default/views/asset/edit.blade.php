@@ -5,8 +5,14 @@
         {{ Former::hidden('id')->value($formdata['_id']) }}
 
         {{ Former::text('itemDescription','Description') }}
-
-        {{ Former::text('extURL','Link to URL') }}
+        <div class="row">
+            <div class="col-md-3">
+                {{ Former::select('externalLink')->options(array('yes'=>'Yes','no'=>'No'))->label('Link to External URL') }}
+            </div>
+            <div class="col-md-9">
+                {{ Former::text('extURL','External URL') }}
+            </div>
+        </div>
 
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active','scheduled'=>'Scheduled'))->label('Status') }}
 
@@ -37,6 +43,9 @@
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
+        <h5>Advertorial</h5>
+        {{ Former::textarea('advertorial','Advertorial Body')->class('editor')->rows(10)->columns(20) }}
+
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
@@ -45,7 +54,7 @@
 @section('right')
 
 
-        <h5>Images</h5>
+        <h5>Banner Image</h5>
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 {{ Former::select('useImage')->label('Image Source')->options(array('linked'=>'Linked Image','upload'=>'Uploaded Image'))->label('Choose whether to use linked of uploaded image') }}
@@ -73,6 +82,10 @@
 @stop
 
 @section('aux')
+{{ HTML::style('css/summernote.css') }}
+{{ HTML::style('css/summernote-bs3.css') }}
+
+{{ HTML::script('js/summernote.min.js') }}
 
 <script type="text/javascript">
 
@@ -86,6 +99,10 @@ $(document).ready(function() {
         var title = $('#name').val();
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
+    });
+
+    $('.editor').summernote({
+        height:500
     });
 
     $('#location').on('change',function(){
