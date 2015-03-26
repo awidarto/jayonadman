@@ -1,10 +1,32 @@
 <div class="row">
     {{ Former::open_vertical($report_action)->method('get') }}
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    <div class="col-md-5">
         {{ Former::text('date_filter','Date Range')->id('date_filter')->class('search_init form-control input-sm filterdaterangepicker')->placeholder('pick date range')->value(Input::get('date_filter')) }}
+        {{ Former::select('ad_page','Page Display')->id('ad_page')->options( Prefs::ExtractPages(true) , Input::get('ad_page') ) }}
+
+        {{ Former::select('ad_hotspot','Hotspot')->id('ad_hotspot')->options( Prefs::ExtractHotspot(true), Input::get('ad_hotspot') ) }}
+
         {{ Form::submit('Generate',array('name'=>'submit','class'=>'btn btn-primary input-sm pull-right'))}}
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    <div class="col-md-7">
+        <p>
+            <img src="{{ $asset['defaultpictures']['thumbnail_url'] }}" alt="{{ $asset['defaultpictures']['thumbnail_url'] }}" />
+        </p>
+
+        <?php
+            $a = $asset;
+        ?>
+        <dl>
+            <dt>Description</dt>
+            <dd>{{ $a->itemDescription }}&nbsp;</dd>
+            <dt>Merchant</dt>
+            <dd>{{ $a->merchantName }}&nbsp;</dd>
+            <dt>Status</dt>
+            <dd>{{ $a->status }}&nbsp;</dd>
+            <dt>Tags</dt>
+            <dd>{{ $a->tags }}&nbsp;</dd>
+        </dl>
+
     </div>
     {{ Former::close()}}
 </div>
@@ -15,36 +37,6 @@
     <h5 id="myPrintModalLabel">Print Selected Codes</span></h5>
     </div>
     <div class="modal-body" style="overflow:auto;" >
-        <h6>Print options</h6>
-        <?php
-            $d = Prefs::getPrintDefault('asset');
-        ?>
-        <div style="border-bottom:thin solid #ccc;" class="row form-vertical clearfix">
-            <div class="col-md-2">
-                {{ Former::text('label_columns','Number of columns')->value($d->col)->id('label_columns')->class('form-control input-sm') }}
-                {{ Former::text('label_res','Resolution')->value($d->res)->id('label_res')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('label_cell_height','Label height')->value($d->cell_height)->id('label_cell_height')->class('form-control input-sm') }}
-                {{ Former::text('label_cell_width','Label width')->value($d->cell_width )->id('label_cell_width')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('label_margin_right','Label margin right')->value( $d->margin_right )->id('label_margin_right')->class('form-control input-sm') }}
-                {{ Former::text('label_margin_bottom','Label margin bottom')->value( $d->margin_bottom )->id('label_margin_bottom')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('label_offset_right','Page left offset')->value('40')->id('label_offset_right')->class('form-control input-sm') }}
-                {{ Former::text('label_offset_bottom','Page top offset')->value('20')->id('label_offset_bottom')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('font_size','Font size')->value( $d->font_size )->id('font_size')->class('form-control input-sm') }}
-                {{ Former::select('code_type','Code type')->id('code_type')->options(array('qr'=>'QR','pdf417'=>'PDF417'), $d->code_type ) }}
-            </div>
-            <div class="col-md-2">
-                <button id="label_default" class="form-control" >make default</button>
-                <button id="label_refresh" class="form-control" >refresh</button>
-            </div>
-        </div>
         <input type="hidden" value="" id="session_name" />
         <input type="hidden" value="" id="label_id" />
 
@@ -151,6 +143,14 @@ button#label_default{
                 $('#print-modal').modal('hide');
             }
 
+        });
+
+        $('.auto_merchant').autocomplete({
+            source: base + 'ajax/merchant',
+            select: function(event, ui){
+                $('#merchant-id').val(ui.item.id);
+                $('#merchant-id-txt').html(ui.item.id);
+            }
         });
 
         $('#do-print').click(function(){

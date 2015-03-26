@@ -14,40 +14,14 @@
     }
 </style>
 <dl>
-    <dt>Asset Code</dt>
-    <dd>{{ $a->SKU }}</dd>
-    <dt>Status</dt>
-    <dd>{{ $a->status }}</dd>
-    <dt>Asset Type</dt>
-    <dd>{{ $a->assetType }}</dd>
-    <dt>Location</dt>
-    <dd>{{ $a->locationId }}</dd>
-    <dt>Rack</dt>
-    <dd>{{ $a->rackId }}</dd>
     <dt>Description</dt>
     <dd>{{ $a->itemDescription }}</dd>
-    <dt>IP</dt>
-    <dd>{{ $a->IP }}</dd>
-    <dt>Host Name</dt>
-    <dd>{{ $a->hostName }}</dd>
-    <dt>OS</dt>
-    <dd>{{ $a->OS }}</dd>
-    <dt>Power Status</dt>
-    <dd>{{ ($a->powerStatus)?'Yes':'No' }}</dd>
-    <dt>Label Status</dt>
-    <dd>{{ ($a->labelStatus)?'Yes':'No' }}</dd>
-    <dt>Virtual Status</dt>
-    <dd>{{ ($a->virtualStatus)?'Yes':'No' }}</dd>
-
-    <dt>Owner</dt>
-    <dd>{{ $a->owner }}</dd>
-    <dt>PIC</dt>
-    <dd>{{ $a->PIC }}</dd>
-    <dt>Contract Number</dt>
-    <dd>{{ $a->contractNumber }}</dd>
+    <dt>Merchant</dt>
+    <dd>{{ $a->merchantName }}</dd>
+    <dt>Status</dt>
+    <dd>{{ $a->status }}</dd>
     <dt>Tags</dt>
     <dd>{{ $a->tags }}</dd>
-
 </dl>
 @if(isset($a->files))
 <ul class="gallery">

@@ -2,6 +2,8 @@
 
 class StatsController extends BaseReportController {
 
+    public $asset;
+
     public function __construct()
     {
         parent::__construct();
@@ -109,13 +111,39 @@ class StatsController extends BaseReportController {
 
     public function getMerchant($mid = null)
     {
+        $mid = Input::get('merchantId');
+        $aid = Input::get('ad_asset');
+        $adpage = Input::get('ad_page');
+        $adhotspot = Input::get('ad_hotspot');
+
+        $q = array();
+
+        if($mid != ''){
+            $q['merchantId'] = $mid;
+        }
+
+        if($adpage != ''){
+            $q['pageUri'] = $adpage;
+        }
+
+        $asset = false;
+
+        if($aid != ''){
+            $q['adId'] = $aid;
+            $asset = Asset::find($aid);
+        }
+
+        if($adhotspot != ''){
+            $q['spot'] = $adhotspot;
+        }
 
         Breadcrumbs::addCrumb('Statistics',URL::to($this->controller_name));
 
-        $this->report_action = $this->controller_name;
+        $this->report_action = $this->controller_name.'/merchant';
 
-        $this->additional_filter = View::make('stats.addfilter')
+        $this->additional_filter = View::make('stats.merchant')
             ->with('report_action', $this->report_action)
+            ->with('asset',$asset)
             ->render();
 
             $daterange = Input::get('date_filter');
@@ -149,17 +177,17 @@ class StatsController extends BaseReportController {
                 $from = new MongoDate( strtotime( $t['start'] ) );
                 $to = new MongoDate( strtotime( $t['end'] ) );
 
-                if(is_null($mid)){
-                    $clicks[] = Clicklog::whereBetween('clickedAt', array($from, $to) )->count();
-                    $views[] = Viewlog::whereBetween('viewedAt', array($from, $to) )->count();
-                }else{
-                    $clicks[] = Clicklog::whereBetween('clickedAt', array($from, $to) )
-                                    ->where('merchantId',$mid)
-                                    ->count();
-                    $views[] = Viewlog::whereBetween('viewedAt', array($from, $to) )
-                                    ->where('merchantId',$mid)
-                                    ->count();
-                }
+                $qc['clickedAt'] = array('$gte' => $from, '$lte' => $to);
+
+                $qv['viewedAt'] = array('$gte' => $from, '$lte' => $to);
+
+                $qc = array_merge($q, $qc);
+                $qv = array_merge($q, $qv);
+
+                $clicks[] = Clicklog::whereRaw($qc)
+                                ->count();
+                $views[] = Viewlog::whereRaw($qv)
+                                ->count();
 
                 $labels[] = date('d-m-Y', strtotime( $t['start'] ) );
             }
@@ -195,11 +223,138 @@ class StatsController extends BaseReportController {
                 $this->data = array(
                     'series01'=>$viewData,
                     'series02'=>$clickData,
-                    'labels'=>$labels
+                    'labels'=>$labels,
+                    'asset'=>$asset
                     );
 
+        $this->is_report = false;
+        $this->is_additional_action = false;
         $this->report_view = 'stats.report';
-        $this->title = 'Global Statistics';
+        $this->title = 'Statistics by Merchant';
+        return parent::getIndex();
+
+    }
+
+    public function getAsset($aid = null)
+    {
+        if(is_null($aid)){
+            $aid = Input::get('adId');
+        }
+        $adpage = Input::get('ad_page');
+        $adhotspot = Input::get('ad_hotspot');
+
+        $q = array();
+
+        $asset = array();
+
+        if($aid != ''){
+            $q['adId'] = $aid;
+            $asset = Asset::find($aid);
+        }
+
+
+        if($adpage != ''){
+            $q['pageUri'] = $adpage;
+        }
+
+        if($adhotspot != ''){
+            $q['spot'] = $adhotspot;
+        }
+
+        Breadcrumbs::addCrumb('Ad Assets',URL::to('asset'));
+
+        $this->report_action = $this->controller_name.'/asset/'.$aid;
+
+        $this->additional_filter = View::make('stats.asset')
+            ->with('report_action', $this->report_action)
+            ->with('asset',$asset)
+            ->render();
+
+            $daterange = Input::get('date_filter');
+
+            if($daterange == '' || is_null($daterange)){
+                $daterange = date('01-m-Y',time()).' - '.date('t-m-Y',time());
+            }
+
+            $daterange = explode(' - ', $daterange);
+            $start = Carbon::parse($daterange[0]);
+            $end = Carbon::parse($daterange[1]);
+            $end->addDay();
+
+            $timerange = array();
+
+            do{
+
+                $endday = clone($start);
+                $endday->addHours(23)->addMinutes(59)->addSeconds(59);
+                //print $start->toDateTimeString().' - '.$endday->toDateTimeString()."\r\n";
+
+                $timerange[] = array('start'=>$start->toDateTimeString(), 'end'=>$endday->toDateTimeString());
+
+                $start->addDay();
+            }while($start != $end);
+
+            $views = array();
+            $clicks = array();
+            $labels = array();
+            foreach ($timerange as $t) {
+                $from = new MongoDate( strtotime( $t['start'] ) );
+                $to = new MongoDate( strtotime( $t['end'] ) );
+
+                $qc['clickedAt'] = array('$gte' => $from, '$lte' => $to);
+
+                $qv['viewedAt'] = array('$gte' => $from, '$lte' => $to);
+
+                $qc = array_merge($q, $qc);
+                $qv = array_merge($q, $qv);
+
+                $clicks[] = Clicklog::whereRaw($qc)
+                                ->count();
+                $views[] = Viewlog::whereRaw($qv)
+                                ->count();
+
+                $labels[] = date('d-m-Y', strtotime( $t['start'] ) );
+            }
+
+
+
+
+            //print_r($clicks);
+
+                $clickData = array(
+                    'label'=>'Clicks',
+                    'fillColor'=>'rgba(123,109,112,0.5)',
+                    'strokeColor'=>'rgba(123,109,112,1)',
+                    'pointColor'=>'rgba(123,109,112,1)',
+                    'pointStrokeColor'=>'#fff',
+                    'pointHighlightFill'=>'#fff',
+                    'pointHighlightStroke'=>'rgba(220,220,220,1)',
+                    'data'=>$clicks
+                );
+
+                $viewData = array(
+                    'label'=>'Views',
+                    'fillColor'=>'rgba(234,219,196,0.5)',
+                    'strokeColor'=>'rgba(234,219,196,1)',
+                    'pointColor'=>'rgba(234,219,196,1)',
+                    'pointStrokeColor'=>'#fff',
+                    'pointHighlightFill'=>'#fff',
+                    'pointHighlightStroke'=>'rgba(220,220,220,1)',
+                    'data'=>$views
+                );
+
+
+                $this->data = array(
+                    'series01'=>$viewData,
+                    'series02'=>$clickData,
+                    'labels'=>$labels,
+                    'asset'=>$asset
+                    );
+
+        $this->is_report = false;
+        $this->is_additional_action = false;
+        $this->report_view = 'stats.assetreport';
+        $this->title = 'Statistics by Ad Asset';
         return parent::getIndex();
 
     }

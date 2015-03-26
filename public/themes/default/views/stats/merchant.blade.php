@@ -1,12 +1,48 @@
 <div class="row">
     {{ Former::open_vertical($report_action)->method('get') }}
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    <div class="col-md-4">
         {{ Former::text('date_filter','Date Range')->id('date_filter')->class('search_init form-control input-sm filterdaterangepicker')->placeholder('pick date range')->value(Input::get('date_filter')) }}
+
+        {{ Former::text('merchantName','Merchant')->class('form-control auto_merchant')->help('autocomplete, used to get merchant ID') }}
+
+        {{ Former::hidden('merchantId','Merchant ID')->class('form-control auto_merchant')->id('merchant-id') }}
+
+        <div class="" >
+            <p>Merchant ID : <span id="merchant-id-txt"></span></p>
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+            {{ Former::select('ad_asset','Ad Asset / Banner')->id('ad_asset')->options( Prefs::ExtractAdAsset( Input::get('merchantId'), true) , Input::get('merchantId') ) }}
+
+            {{ Former::select('ad_page','Page Display')->id('ad_page')->options( Prefs::ExtractPages(true) , Input::get('ad_page') ) }}
+
+            {{ Former::select('ad_hotspot','Hotspot')->id('ad_hotspot')->options( Prefs::ExtractHotspot(true), Input::get('ad_hotspot') ) }}
+
         {{ Form::submit('Generate',array('name'=>'submit','class'=>'btn btn-primary input-sm pull-right'))}}
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-    </div>
     {{ Former::close()}}
+    <div class="col-md-5">
+        @if($asset)
+        <p>
+            <img src="{{ $asset['defaultpictures']['thumbnail_url'] }}" alt="{{ $asset['defaultpictures']['thumbnail_url'] }}" />
+        </p>
+        <?php
+            $a = $asset;
+        ?>
+        <dl>
+            <dt>Description</dt>
+            <dd>{{ $a->itemDescription }}&nbsp;</dd>
+            <dt>Merchant</dt>
+            <dd>{{ $a->merchantName }}&nbsp;</dd>
+            <dt>Status</dt>
+            <dd>{{ $a->status }}&nbsp;</dd>
+            <dt>Tags</dt>
+            <dd>{{ $a->tags }}&nbsp;</dd>
+        </dl>
+        @endif
+    </div>
 </div>
 
 <div id="print-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myPrintModalLabel" aria-hidden="true">
@@ -151,6 +187,14 @@ button#label_default{
                 $('#print-modal').modal('hide');
             }
 
+        });
+
+        $('.auto_merchant').autocomplete({
+            source: base + 'ajax/merchant',
+            select: function(event, ui){
+                $('#merchant-id').val(ui.item.id);
+                $('#merchant-id-txt').html(ui.item.id);
+            }
         });
 
         $('#do-print').click(function(){

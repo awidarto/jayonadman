@@ -23,6 +23,8 @@
 
     <!-- Custom styles for this template -->
     {{ HTML::style('css/navbar-fixed-top.css')}}
+    {{ HTML::style('js/jquery-ui-1.11.2.custom/jquery-ui.min.css')}}
+    {{ HTML::style('js/jquery-ui-1.11.2.custom/jquery-ui.theme.min.css')}}
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->

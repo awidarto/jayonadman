@@ -146,6 +146,57 @@ class Prefs {
         return $cats;
     }
 
+    public static function ExtractPages($selection = true)
+    {
+        $category = Viewlog::distinct('pageUri')->get()->toArray();
+        if($selection){
+            $cats = array(''=>'All');
+        }else{
+            $cats = array();
+        }
+
+        //print_r($category);
+        foreach($category as $cat){
+            $cats[$cat[0]] = $cat[0];
+        }
+
+        return $cats;
+    }
+
+    public static function ExtractHotspot($selection = true)
+    {
+        $category = Viewlog::distinct('spot')->get()->toArray();
+        if($selection){
+            $cats = array(''=>'All');
+        }else{
+            $cats = array();
+        }
+
+        //print_r($category);
+        foreach($category as $cat){
+            $cats[$cat[0]] = $cat[0];
+        }
+
+        return $cats;
+    }
+
+    public static function ExtractAdAsset($merchant_id,$selection = true)
+    {
+        $category = Asset::where('merchantId', $merchant_id )->get()->toArray();
+        if($selection){
+            $cats = array(''=>'All');
+        }else{
+            $cats = array();
+        }
+
+        if(count($category) > 0){
+            foreach($category as $cat){
+                $cats[$cat['_id']] = $cat['itemDescription'];
+            }
+        }
+
+        return $cats;
+    }
 
     public static function themeAssetsUrl()
     {

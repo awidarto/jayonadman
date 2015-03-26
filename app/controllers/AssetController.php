@@ -59,7 +59,7 @@ class AssetController extends AdminController {
                 $tab_data[] = array(
                     $d,
                     $h->historyAction,
-                    $h->historyObject['SKU'],
+                    $h->historyObject['itemDescription'],
                     ($h->historyAction == 'new')?'NA':$this->objdiff( $diffs[$d] ),
                     $bt_apv
                 );
@@ -85,7 +85,7 @@ class AssetController extends AdminController {
 
         return View::make('history.table')
                     ->with('a',$asset)
-                    ->with('title','Asset Detail '.$asset->SKU )
+                    ->with('title','Asset Detail '.$asset->itemDescription )
                     ->with('table',$itemtable);
     }
 
@@ -123,7 +123,7 @@ class AssetController extends AdminController {
                 $tab_data[] = array(
                     $d,
                     $h->historyAction,
-                    $h->historyObject['SKU'],
+                    $h->historyObject['itemDescription'],
                     ($h->historyAction == 'new')?'NA':$this->objdiff( $diffs[$d] ),
                     $bt_apv
                 );
@@ -161,7 +161,7 @@ class AssetController extends AdminController {
                 if(isset($obj[0][$key]) && isset($obj[1][$key])){
                     if($obj[0][$key] !== $obj[1][$key]){
                         if($key != '_id' && $key != 'createdDate' && $key != 'lastUpdate'){
-                            if(!is_array($obj[0][$key])){
+                            if( is_string($obj[0][$key]) && is_string($obj[1][$key]) ){
                                 $diff[] = $key.' : '. $obj[0][$key].' -> '.$obj[1][$key];
                             }
                         }
@@ -547,6 +547,7 @@ class AssetController extends AdminController {
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="fa fa-print"></i> Print</a>';
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Upload Picture</span>';
         $inv = '<span class="upinv" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Update Inventory</span>';
+        $edit = '<a href="'.URL::to('stats/asset/'.$data['_id']).'"><i class="fa fa-line-chart"></i> Stats</a>';
 
         $history = '<a href="'.URL::to('asset/history/'.$data['_id']).'"><i class="fa fa-clock-o"></i> History</a>';
 
