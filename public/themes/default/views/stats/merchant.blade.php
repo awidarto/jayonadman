@@ -3,12 +3,27 @@
     <div class="col-md-4">
         {{ Former::text('date_filter','Date Range')->id('date_filter')->class('search_init form-control input-sm filterdaterangepicker')->placeholder('pick date range')->value(Input::get('date_filter')) }}
 
-        {{ Former::text('merchantName','Merchant')->class('form-control auto_merchant')->help('autocomplete, used to get merchant ID') }}
+        <?php
 
-        {{ Former::hidden('merchantId','Merchant ID')->class('form-control auto_merchant')->id('merchant-id') }}
+            if($merchant){
+                $merchantName = $merchant->merchantname;
+                $merchantId = $merchant->id;
+            }else{
+                $merchantName = Input::get('merchantName');
+                $merchantId = Input::get('merchantId');
+            }
+        ?>
+
+        {{ Former::text('merchantName','Merchant')
+                ->value($merchantName)
+                ->class('form-control auto_merchant')->help('autocomplete, used to get merchant ID') }}
+
+        {{ Former::hidden('merchantId','Merchant ID')
+                ->value($merchantId)
+                ->class('form-control auto_merchant')->id('merchant-id') }}
 
         <div class="" >
-            <p>Merchant ID : <span id="merchant-id-txt"></span></p>
+            <p>Merchant ID : <span id="merchant-id-txt">{{ $merchantId }}</span></p>
         </div>
 
     </div>

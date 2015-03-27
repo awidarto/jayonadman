@@ -99,6 +99,35 @@ Route::get('tonumber',function(){
 
 });
 
+Route::get('syncmerchant', function(){
+
+    set_time_limit(0);
+
+    $mymerchant = Merchant::where('group_id',4)->get();
+
+    foreach($mymerchant->toArray() as $m){
+        //print_r($m);
+        //$m['mid'] = $m['id'];
+        //unset($m['id']);
+        $member = Member::where('id',$m['id'])->first();
+
+        if($member){
+
+        }else{
+            $member = new Member();
+        }
+
+        foreach ($m as $k=>$v) {
+            $member->{$k} = $v;
+        }
+
+        $member->save();
+
+    }
+
+});
+
+
 Route::get('regeneratepic/{obj?}',function($obj = null){
 
     set_time_limit(0);

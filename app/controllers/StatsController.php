@@ -111,15 +111,21 @@ class StatsController extends BaseReportController {
 
     public function getMerchant($mid = null)
     {
-        $mid = Input::get('merchantId');
+        if(is_null($mid)){
+            $mid = Input::get('merchantId');
+        }
+
         $aid = Input::get('ad_asset');
         $adpage = Input::get('ad_page');
         $adhotspot = Input::get('ad_hotspot');
 
         $q = array();
 
+        $merchant = false;
+
         if($mid != ''){
-            $q['merchantId'] = $mid;
+            $q['merchantId'] = new MongoInt32($mid) ;
+            $merchant = Member::where('id', new MongoInt32($mid))->first();
         }
 
         if($adpage != ''){
@@ -137,12 +143,14 @@ class StatsController extends BaseReportController {
             $q['spot'] = $adhotspot;
         }
 
+
         Breadcrumbs::addCrumb('Statistics',URL::to($this->controller_name));
 
         $this->report_action = $this->controller_name.'/merchant';
 
         $this->additional_filter = View::make('stats.merchant')
             ->with('report_action', $this->report_action)
+            ->with('merchant', $merchant)
             ->with('asset',$asset)
             ->render();
 

@@ -12,7 +12,7 @@ class AdvertiserController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Merchant();
+        $this->model = new Member();
         //$this->model = DB::collection('documents');
         $this->title = 'Advertisers';
 
@@ -205,13 +205,12 @@ class AdvertiserController extends AdminController {
     {
 
         $this->heads = array(
-            array('Merchant',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
-            array('Merchant ID',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
-            array('Banner',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
-            array('Description',array('search'=>true,'sort'=>true)),
-            array('Link to URL',array('search'=>true,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
-            array('Month Stats',array('search'=>false,'sort'=>false)),
+            array('Merchant Name',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
+            array('Legacy ID',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
+            array('Email',array('search'=>true,'sort'=>true)),
+            array('Phone',array('search'=>true,'sort'=>true)),
+            array('Street',array('search'=>true,'sort'=>true)),
+            array('City',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
         );
@@ -224,7 +223,7 @@ class AdvertiserController extends AdminController {
 
         Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
-        $this->additional_filter = View::make('asset.addfilter')->render();
+        $this->additional_filter = View::make(strtolower($this->controller_name).'.addfilter')->with('sync_url', strtolower($this->controller_name).'/synclegacy'  )->render();
 
         $this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
 
@@ -238,22 +237,24 @@ class AdvertiserController extends AdminController {
     {
 
         $this->fields = array(
-            array('merchantName',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('merchantId',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('itemDescription',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('extURL',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
-            array('_id',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'statNumbers')),
+            array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('id',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('email',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('phone',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('street',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
         );
 
-        $categoryFilter = Input::get('categoryFilter');
-
+        //$categoryFilter = Input::get('categoryFilter');
+        /*
         if($categoryFilter != ''){
             $this->additional_query = array('category'=>$categoryFilter);
         }
+        */
+
+        $this->additional_query = array('group_id'=>4);
 
         $this->place_action = 'first';
 
@@ -542,16 +543,16 @@ class AdvertiserController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-times-circle"></i> Delete</span>';
-        $edit = '<a href="'.URL::to('asset/edit/'.$data['_id']).'"><i class="fa fa-edit"></i> Update</a>';
+        $edit = '<a href="'.URL::to('advertiser/edit/'.$data['_id']).'"><i class="fa fa-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="fa fa-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="fa fa-print"></i> Print</a>';
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Upload Picture</span>';
         $inv = '<span class="upinv" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Update Inventory</span>';
-        $stat = '<a href="'.URL::to('stats/asset/'.$data['_id']).'"><i class="fa fa-line-chart"></i> Stats</a>';
+        $stat = '<a href="'.URL::to('stats/merchant/'.$data['id']).'"><i class="fa fa-line-chart"></i> Stats</a>';
 
-        $history = '<a href="'.URL::to('asset/history/'.$data['_id']).'"><i class="fa fa-clock-o"></i> History</a>';
+        $history = '<a href="'.URL::to('advertiser/history/'.$data['_id']).'"><i class="fa fa-clock-o"></i> History</a>';
 
-        $actions = $stat.'<br />'.$edit.'<br />'.$history.'<br />'.$delete;
+        $actions = $stat.'<br />'.$edit.'<br />'.$delete;
         return $actions;
     }
 
@@ -617,6 +618,37 @@ class AdvertiserController extends AdminController {
         }else{
             return '';
         }
+
+    }
+
+    public function postSynclegacy(){
+
+        set_time_limit(0);
+
+        $mymerchant = Merchant::where('group_id',4)->get();
+
+        $count = 0;
+
+        foreach($mymerchant->toArray() as $m){
+
+            $member = Member::where('id',$m['id'])->first();
+
+            if($member){
+
+            }else{
+                $member = new Member();
+            }
+
+            foreach ($m as $k=>$v) {
+                $member->{$k} = $v;
+            }
+
+            $member->save();
+
+            $count++;
+        }
+
+        return Response::json( array('result'=>'OK', 'count'=>$count ) );
 
     }
 
