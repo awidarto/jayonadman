@@ -58,9 +58,6 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ sa('activity') }}" >
-                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Audit Trails</a>
-                    </li>
-                    <li class="{{ sa('activity') }}" >
                         <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Site Activity</a>
                     </li>
                     <li class="{{ sa('access') }}">
