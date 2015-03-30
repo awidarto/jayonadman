@@ -1,6 +1,6 @@
 <?php
 
-class AccessController extends AdminController {
+class ShopcategoryController extends AdminController {
 
     public function __construct()
     {
@@ -12,8 +12,11 @@ class AccessController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Accesslog();
+        $this->model = new Shopcategory();
+
+        $this->title = 'Shop Category';
         //$this->model = DB::collection('documents');
+        $this->title = $this->controller_name;
 
     }
 
@@ -27,19 +30,15 @@ class AccessController extends AdminController {
 
     public function getIndex()
     {
+
         $this->heads = array(
-            array('REQUEST_TIME',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
-            array('HTTP_REFERER',array('search'=>true,'sort'=>false)),
-            array('REQUEST_URI',array('search'=>true,'sort'=>true)),
-            array('REMOTE_ADDR',array('search'=>true,'sort'=>true)),
-            array('REDIRECT_STATUS',array('search'=>true,'sort'=>true)),
+            array('Title',array('search'=>true,'sort'=>true)),
+            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
 
+        $this->title = 'Shop Category';
         //print $this->model->where('docFormat','picture')->get()->toJSON();
-
-        $this->title = 'Site Access';
-
-        $this->place_action = 'none';
 
         return parent::getIndex();
 
@@ -49,14 +48,10 @@ class AccessController extends AdminController {
     {
 
         $this->fields = array(
-            array('created_at',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('HTTP_REFERER',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('REQUEST_URI',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('REMOTE_ADDR',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('REDIRECT_STATUS',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
-
-        $this->place_action = 'none';
 
         return parent::postIndex();
     }
@@ -65,64 +60,27 @@ class AccessController extends AdminController {
     {
 
         $this->validator = array(
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email'=> 'required|unique:agents',
-            'pass'=>'required|same:repass'
+            'name' => 'required',
+            'slug'=> 'required'
         );
 
         return parent::postAdd($data);
     }
 
-    public function beforeSave($data)
-    {
-        unset($data['repass']);
-        $data['pass'] = Hash::make($data['pass']);
-        return $data;
-    }
-
-    public function beforeUpdate($id,$data)
-    {
-        //print_r($data);
-
-        if(isset($data['pass']) && $data['pass'] != ''){
-            unset($data['repass']);
-            $data['pass'] = Hash::make($data['pass']);
-
-        }else{
-            unset($data['pass']);
-            unset($data['repass']);
-        }
-
-        //print_r($data);
-
-        //exit();
-
-        return $data;
-    }
-
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email'=> 'required'
+            'name' => 'required',
+            'slug'=> 'required'
         );
-
-        if($data['pass'] == ''){
-            unset($data['pass']);
-            unset($data['repass']);
-        }else{
-            $this->validator['pass'] = 'required|same:repass';
-        }
 
         return parent::postEdit($id,$data);
     }
 
     public function makeActions($data)
     {
-        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('agent/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i>Delete</span>';
+        $edit = '<a href="'.URL::to('shopcategory/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

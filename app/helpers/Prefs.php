@@ -3,6 +3,7 @@
 class Prefs {
 
     public static $category;
+    public static $shopcategory;
     public static $section;
     public static $faqcategory;
     public static $productcategory;
@@ -11,6 +12,12 @@ class Prefs {
     public function __construct()
     {
 
+    }
+
+    public static function getShopCategory(){
+        $c = Shopcategory::get();
+        self::$shopcategory = $c;
+        return new self;
     }
 
     public static function getCategory(){
@@ -58,6 +65,22 @@ class Prefs {
         return $ret;
     }
 
+    public function ShopCatToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'All');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$shopcategory as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
     public function sectionToArray()
     {
         return self::$section;
@@ -66,6 +89,11 @@ class Prefs {
     public function catToArray()
     {
         return self::$category;
+    }
+
+    public function shopcatToArray()
+    {
+        return self::$shopcategory;
     }
 
     public static function getRole(){

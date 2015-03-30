@@ -12,7 +12,7 @@ class ApiaccessController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Activelog();
+        $this->model = new Apilog();
         //$this->model = DB::collection('documents');
 
     }
@@ -63,7 +63,7 @@ class ApiaccessController extends AdminController {
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Activity';
+        $this->title = 'API Access Log';
 
         return parent::getIndex();
 

@@ -207,6 +207,7 @@ class AdvertiserController extends AdminController {
         $this->heads = array(
             array('Merchant Name',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Legacy ID',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
+            array('Category',array('search'=>true,'select'=>Prefs::getShopCategory()->shopcatToSelection('slug', 'name' ) ,'sort'=>true)),
             array('Email',array('search'=>true,'sort'=>true)),
             array('Phone',array('search'=>true,'sort'=>true)),
             array('Street',array('search'=>true,'sort'=>true)),
@@ -239,6 +240,7 @@ class AdvertiserController extends AdminController {
         $this->fields = array(
             array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('id',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
             array('email',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('phone',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('street',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -247,14 +249,10 @@ class AdvertiserController extends AdminController {
             array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
         );
 
-        //$categoryFilter = Input::get('categoryFilter');
-        /*
+        $categoryFilter = Input::get('categoryFilter');
         if($categoryFilter != ''){
-            $this->additional_query = array('category'=>$categoryFilter);
+            $this->additional_query = array('shopcategoryLink'=>$categoryFilter, 'group_id'=>4);
         }
-        */
-
-        $this->additional_query = array('group_id'=>4);
 
         $this->place_action = 'first';
 
@@ -605,6 +603,11 @@ class AdvertiserController extends AdminController {
             return '';
         }
 
+    }
+
+    public function catName($data)
+    {
+        return $data['shopcategory'];
     }
 
     public function rackName($data){

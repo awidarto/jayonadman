@@ -792,6 +792,26 @@ class AjaxController extends BaseController {
 
     }
 
+    public function postAssignshopcat(){
+        $in = Input::get();
+
+        $category = $in['category'];
+
+        $cats = Prefs::getShopCategory()->ShopCatToSelection('slug', 'name', false);
+
+        $product_ids = $in['product_ids'];
+
+        foreach($product_ids as $p){
+            $prop = Member::find($p);
+            $prop->shopcategory = $cats[$category];
+            $prop->shopcategoryLink = $category;
+            $prop->save();
+        }
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
     public function postAssignoutlet(){
         $in = Input::get();
 
