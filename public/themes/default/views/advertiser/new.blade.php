@@ -1,51 +1,57 @@
 @extends('layout.fixedtwo')
 
-
 @section('left')
+        <h5>Account Information</h5>
 
-        <h5>Ad Asset Info</h5>
+        {{ Former::text('username','Username') }}
+        {{ Former::text('email','Email') }}
 
-        {{ Former::text('itemDescription','Description') }}
+        {{ Former::password('pass','Password') }}
+        {{ Former::password('repass','Repeat Password') }}
 
-        <div class="row">
-            <div class="col-md-3">
-                {{ Former::select('externalLink')->options(array('yes'=>'Yes','no'=>'No'))->label('Link to External URL') }}
-            </div>
-            <div class="col-md-9">
-                {{ Former::text('extURL','External URL') }}
-            </div>
-        </div>
-        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active','scheduled'=>'Scheduled'))->label('Status') }}
+        <h5>Owner / Personal Info</h5>
 
-        {{-- Former::select('assetType','Device Type')->options( Assets::getType()->TypeToSelection('type','type',true) ) --}}
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                {{ Former::text('fromDate','From')->class('form-control eventdate')
-                    ->id('fromDate')
-                    //->data_format('dd-mm-yyyy')
-                    ->append('<i class="fa fa-th"></i>') }}
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                {{ Former::text('toDate','Until')->class('form-control eventdate')
-                    ->id('toDate')
-                    //->data_format('dd-mm-yyyy')
-                    ->append('<i class="fa fa-th"></i>') }}
-            </div>
-        </div>
+        {{ Former::text('fullname','Full Name') }}
+
         <div class="row">
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                {{ Former::select('isDefault')->options(array('yes'=>'Yes','no'=>'No'))->label('Set As Default Ad') }}
+                {{ Former::text('phone','Phone') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mobile','Mobile 1') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mobile1','Mobile 2') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mobile2','Mobile 3') }}
             </div>
         </div>
 
-        <h5>Advertiser</h5>
-        {{ Former::text('merchantName','Merchant')->class('form-control auto_merchant')->help('autocomplete, use to get merchant ID') }}
-        {{ Former::text('merchantId','Merchant ID')->class('form-control auto_merchant')->id('merchant-id') }}
 
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
+        {{ Former::text('street','Address') }}
 
-        <h5>Advertorial</h5>
-        {{ Former::textarea('advertorial','Advertorial Body')->class('editor')->rows(10)->columns(20) }}
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('district','Kecamatan') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('city','City') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('zip','ZIP / Kode Pos') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('province','Province') }}
+            </div>
+        </div>
+
+
+
+
+        {{ Former::select('country')->id('country')->options(Config::get('country.countries'))->label('Country of Origin') }}
+
+        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active','scheduled'=>'Scheduled'))->label('Status') }}
 
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
@@ -53,18 +59,60 @@
 @stop
 
 @section('right')
+        <h5>Shop Information</h5>
+        {{ Former::text('merchantname','Shop Name')->class('form-control') }}
 
-
-        <h5>Banner Image</h5>
         <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                {{ Former::select('useImage')->label('Image Source')->options(array('linked'=>'Linked Image','upload'=>'Uploaded Image'))->label('Choose whether to use linked of uploaded image') }}
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                {{ Former::text('bank','Bank')->class('form-control') }}
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                {{ Former::text('account_number','Account Number')->class('form-control') }}
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                {{ Former::text('account_name','Account Name')->class('form-control') }}
             </div>
         </div>
-        <h6>Link to Image</h6>
-        {{ Former::text('extImageURL','External Image URL')->help('Image URL eg: "http://some.domain/image.jpg"') }}
 
-        <h6>Upload Image</h6>
+        {{ Former::text('mc_street','Address')->class('form-control') }}
+
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mc_district','Kecamatan') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mc_city','City') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mc_zip','ZIP / Kode Pos') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mc_province','Province') }}
+            </div>
+        </div>
+
+        {{ Former::select('mc_country')->id('mc_country')->options(Config::get('country.countries'))->label('Country of Origin') }}
+
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mc_phone','Phone') }}
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                {{ Former::text('mc_mobile','Mobile 1') }}
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                {{ Former::text('mc_email','Shop Email')->class('form-control') }}
+            </div>
+        </div>
+
+        {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+        {{ Former::textarea('shopDescription','Shop Description')->class('editor')->rows(10)->columns(20) }}
+
+
+
+
+        <h6>Upload Cover Image</h6>
         <?php
             $fupload = new Fupload();
         ?>
@@ -73,6 +121,7 @@
             ->singlefile(true)
             ->prefix('asset')
             ->multi(false)->make() }}
+
 
 @stop
 
@@ -127,7 +176,6 @@ $(document).ready(function() {
         }
     });
 
-
     function updateselector(data){
         var opt = '';
         for(var k in data){
@@ -135,8 +183,6 @@ $(document).ready(function() {
         }
         return opt;
     }
-
-
 
 
 });

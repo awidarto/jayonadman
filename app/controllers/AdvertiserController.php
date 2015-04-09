@@ -398,42 +398,18 @@ class AdvertiserController extends AdminController {
 
     public function postAdd($data = null)
     {
-        if(isset($data['useImage']) && $data['useImage'] == 'linked'){
-            $this->validator = array(
-                'itemDescription' => 'required',
-                'extImageURL'=>'required'
-            );
-        }else{
-            $this->validator = array(
-                'itemDescription' => 'required'
-            );
-        }
+        $this->validator = array(
+            'shopDescription' => 'required'
+        );
 
         return parent::postAdd($data);
     }
 
     public function postEdit($id,$data = null)
     {
-        if(isset($data['useImage']) && $data['useImage'] == 'linked'){
-            $this->validator = array(
-                'itemDescription' => 'required',
-                'extImageURL'=>'required'
-            );
-        }else{
-            $this->validator = array(
-                'itemDescription' => 'required'
-            );
-        }
-
-        $hobj = Asset::find($id)->toArray();
-        $hobj['_id'] = new MongoId($id);
-
-        $hdata['historyTimestamp'] = new MongoDate();
-        $hdata['historyAction'] = 'update';
-        $hdata['historySequence'] = 0;
-        $hdata['historyObjectType'] = 'asset';
-        $hdata['historyObject'] = $hobj;
-        History::insert($hdata);
+        $this->validator = array(
+            'shopDescription' => 'required'
+        );
 
         return parent::postEdit($id,$data);
     }
