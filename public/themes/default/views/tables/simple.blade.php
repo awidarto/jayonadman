@@ -568,13 +568,21 @@ select.input-sm {
 
 		*/
 
-		$('#select_all').on('click',function(){
-			if($('#select_all').is(':checked')){
-				$('.selector').prop('checked', true);
-			}else{
-				$('.selector').prop('checked',false);
-			}
-		});
+        $('#select_all').on('click',function(){
+            if($('#select_all').is(':checked')){
+                $('.selector').prop('checked', true);
+            }else{
+                $('.selector').prop('checked',false);
+            }
+        });
+
+        $('#select_all').on('ifChecked',function(){
+            $('.selector').prop('checked', true);
+        });
+
+        $('#select_all').on('ifUnchecked',function(){
+            $('.selector').prop('checked', false);
+        });
 
 
 		$('#confirmdelete').click(function(){
