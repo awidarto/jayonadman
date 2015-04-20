@@ -420,29 +420,15 @@ class AdvertiserController extends AdminController {
         $this->heads = null;
 
         $this->fields = array(
-                array('IP',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('OS',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('PIC',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('PicPhone',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('PicEmail',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('assetType',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('contractNumber',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('hostName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('locationName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('rackId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('rackName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('owner',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('labelStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('powerStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('virtualStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('rackId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-                array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+            array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('id',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
+            array('email',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('phone',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('street',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
         );
 
         return parent::postDlxl();
