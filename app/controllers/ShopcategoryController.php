@@ -86,6 +86,23 @@ class ShopcategoryController extends AdminController {
         return $actions;
     }
 
+    public function postDlxl()
+    {
+
+        $this->heads = null;
+
+        $this->fields = array(
+                array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('slug',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+        );
+
+        return parent::postDlxl();
+    }
+
+
     public function splitTag($data){
         $tags = explode(',',$data['docTag']);
         if(is_array($tags) && count($tags) > 0 && $data['docTag'] != ''){

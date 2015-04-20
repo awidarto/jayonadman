@@ -128,6 +128,53 @@ Route::get('syncmerchant', function(){
 
 });
 
+Route::get('impcat',function(){
+
+    $slugs = array(
+        'Others'=>'others',
+        'Music Instruments'=>'music-instruments',
+        'Electronics'=>'electronics',
+        'Motorcycle Accessories'=>'motorcycle-accessories',
+        'Homes and Gardens'=>'homes-and-gardens',
+        'Pet Supplies'=>'pet-supplies',
+        'Food & Health'=>'food-health',
+        'Health & Beauty'=>'health-beauty',
+        'Watch & Jewelry watch-jewelry',
+        'Collectibles'=>'collectibles',
+        'Food & Health'=>'food-health',
+        'Fashion & Accessories'=>'fashion-accessories',
+        'Books & Magazines'=>'books-magazines',
+        'Toys & Games'=>'toys-games',
+        'Infants & Children'=>'infants-children'
+    );
+
+    $csvfile = public_path().'/storage/import/jex_shops.csv';
+
+    $imp = array();
+
+    Excel::load($csvfile,function($reader) use (&$imp){
+        $imp = $reader->toArray();
+    })->get();
+
+    print_r($imp);
+
+    $count = 0;
+    foreach($imp as $s){
+
+        $m = Member::where('merchantname',$s['merchantname'])->first();
+
+        if($m){
+            $count++;
+            $m->shopcategory = $s['shopcategory'];
+            $m->shopcategoryLink = $slugs[ trim($s['shopcategory']) ];
+
+            $m->save();
+        }
+    }
+    print $count."\r\n";
+
+});
+
 
 Route::get('regeneratepic/{obj?}',function($obj = null){
 
