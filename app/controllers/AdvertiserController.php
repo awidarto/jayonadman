@@ -422,8 +422,9 @@ class AdvertiserController extends AdminController {
         $this->fields = array(
             array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('id',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
-            array('email',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('shopcategory',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('shopcategoryLink',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('email',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('phone',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('street',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
