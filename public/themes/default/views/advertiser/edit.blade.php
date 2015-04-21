@@ -53,7 +53,7 @@
 
         {{ Former::select('country')->id('country')->options(Config::get('country.countries'))->label('Country of Origin') }}
 
-        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active','scheduled'=>'Scheduled'))->label('Status') }}
+        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
 
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
@@ -63,6 +63,8 @@
 @section('right')
         <h5>Shop Information</h5>
         {{ Former::text('merchantname','Shop Name')->class('form-control') }}
+
+        {{ Former::text('url','Website URL')->class('form-control') }}
 
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

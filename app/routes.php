@@ -169,6 +169,8 @@ Route::get('impcat',function(){
             $m->shopcategory = $s['shopcategory'];
             $m->shopcategoryLink = $slugs[ trim($s['shopcategory']) ];
 
+            $m->status = 'active';
+
             $m->save();
 
             print_r($m);
