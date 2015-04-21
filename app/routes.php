@@ -145,10 +145,11 @@ Route::get('impcat',function(){
         'Fashion & Accessories'=>'fashion-accessories',
         'Books & Magazines'=>'books-magazines',
         'Toys & Games'=>'toys-games',
-        'Infants & Children'=>'infants-children'
+        'Infants & Children'=>'infants-children',
+        'Sporting Goods'=>'sporting-goods'
     );
 
-    $csvfile = public_path().'/storage/import/jex_shops.csv';
+    $csvfile = public_path().'/storage/import/jex_shops2.csv';
 
     $imp = array();
 
@@ -161,7 +162,7 @@ Route::get('impcat',function(){
     $count = 0;
     foreach($imp as $s){
 
-        $m = Member::where('merchantname',$s['merchantname'])->first();
+        $m = Member::where('id',$s['id'])->first();
 
         if($m){
             $count++;
@@ -169,6 +170,8 @@ Route::get('impcat',function(){
             $m->shopcategoryLink = $slugs[ trim($s['shopcategory']) ];
 
             $m->save();
+
+            print_r($m);
         }
     }
     print $count."\r\n";
