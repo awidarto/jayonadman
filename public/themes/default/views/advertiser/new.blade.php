@@ -59,7 +59,7 @@
         <h5>Shop Information</h5>
         {{ Former::text('merchantname','Shop Name')->class('form-control') }}
 
-        {{ Former::text('url','Website URL')->class('form-control') }}
+        {{ Former::text('mc_url','Website URL')->class('form-control') }}
 
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

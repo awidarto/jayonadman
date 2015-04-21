@@ -207,7 +207,9 @@ class AdvertiserController extends AdminController {
         $this->heads = array(
             array('Merchant Name',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Legacy ID',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
+            array('Status',array('search'=>true,'sort'=>true ,'select'=>array(''=>'All','active'=>'Active','inactive'=>'Inactive') ,'attr'=>array('class'=>'span2'))),
             array('Category',array('search'=>true,'select'=>Prefs::getShopCategory()->shopcatToSelection('slug', 'name' ) ,'sort'=>true)),
+            array('URL',array('search'=>true,'sort'=>true)),
             array('Email',array('search'=>true,'sort'=>true)),
             array('Phone',array('search'=>true,'sort'=>true)),
             array('Street',array('search'=>true,'sort'=>true)),
@@ -240,7 +242,9 @@ class AdvertiserController extends AdminController {
         $this->fields = array(
             array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('id',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('status',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
+            array('mc_url',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('email',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('phone',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('street',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -410,6 +414,8 @@ class AdvertiserController extends AdminController {
         $this->validator = array(
             'shopDescription' => 'required'
         );
+
+        //exit();
 
         return parent::postEdit($id,$data);
     }

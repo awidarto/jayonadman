@@ -122,6 +122,9 @@ Route::get('syncmerchant', function(){
             $member->{$k} = $v;
         }
 
+        $member->status = 'inactive';
+        $member->url = '';
+
         $member->save();
 
     }
