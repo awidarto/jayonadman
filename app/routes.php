@@ -165,7 +165,7 @@ Route::get('impcat',function(){
     $count = 0;
     foreach($imp as $s){
 
-        $m = Member::where('id',$s['id'])->first();
+        $m = Member::where('id',strval($s['id']))->first();
 
         if($m){
             $count++;
