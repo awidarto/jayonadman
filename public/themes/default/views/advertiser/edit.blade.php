@@ -3,8 +3,6 @@
 @section('left')
         <h5>Account Information</h5>
 
-        {{ print_r($formdata) }}
-
         {{ Former::text('username','Username') }}
         {{ Former::text('email','Email') }}
 
@@ -64,6 +62,8 @@
 
 @section('right')
         <h5>Shop Information</h5>
+        {{ Former::select('shopcategoryLink')->options(Prefs::getShopCategory()->shopcatToSelection('slug', 'name' ))->label('Shop Category') }}
+
         {{ Former::text('merchantname','Shop Name')->class('form-control') }}
 
         {{ Former::text('mc_url','Website URL')->class('form-control') }}

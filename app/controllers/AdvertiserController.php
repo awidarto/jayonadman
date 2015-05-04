@@ -306,6 +306,9 @@ class AdvertiserController extends AdminController {
             $data['defaultpictures'] = '';
         }
 
+        $cats = Prefs::getShopCategory()->shopcatToSelection('slug', 'name', false);
+        $data['shopcategory'] = $cats[$data['shopcategoryLink']];
+
             $data['shortcode'] = str_random(5);
 
         return $data;
@@ -353,9 +356,14 @@ class AdvertiserController extends AdminController {
             $data['defaultpic'] = '';
             $data['defaultpictures'] = '';
         }
+
         if(!isset($data['shortcode']) || $data['shortcode'] == ''){
             $data['shortcode'] = str_random(5);
         }
+
+        $cats = Prefs::getShopCategory()->shopcatToSelection('slug', 'name', false);
+        $data['shopcategory'] = $cats[$data['shopcategoryLink']];
+
 
         return $data;
     }
