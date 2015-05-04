@@ -124,6 +124,7 @@ Route::get('syncmerchant', function(){
 
         $member->status = 'inactive';
         $member->url = '';
+        $member->legacyId = new MongoInt32($m['id']);
 
         $member->save();
 

@@ -758,7 +758,7 @@ class AdminController extends Controller {
 	}
 
 
-	public function postEdit($id,$data = null){
+	public function postEdit($_id,$data = null){
 
 		$controller_name = strtolower($this->controller_name);
 		//print_r(Session::get('permission'));
@@ -781,14 +781,11 @@ class AdminController extends Controller {
 				$data = Input::get();
 	    	}
 
-			$id = new MongoId($data['id']);
+			$id = new MongoId($_id);
 			$data['lastUpdate'] = new MongoDate();
 
 			unset($data['csrf_token']);
-			unset($data['id']);
-
-			//print_r($data);
-			//exit();
+			unset($data['_id']);
 
 
             // process tags by default

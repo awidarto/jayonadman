@@ -3,6 +3,8 @@
 @section('left')
         <h5>Account Information</h5>
 
+        {{ print_r($formdata) }}
+
         {{ Former::text('username','Username') }}
         {{ Former::text('email','Email') }}
 
@@ -11,7 +13,7 @@
 
 
         <h5>Owner / Personal Info</h5>
-        {{ Former::hidden('id')->value($formdata['_id']) }}
+        {{ Former::hidden('_id')->value($formdata['_id']) }}
 
         {{ Former::text('fullname','Full Name') }}
 
