@@ -242,7 +242,7 @@ class AdvertiserController extends AdminController {
         $this->fields = array(
             array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('legacyId',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('status',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('status',array('kind'=>'text', 'query'=>'like','pos'=>'after','show'=>true)),
             array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
             array('mc_url',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('email',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
