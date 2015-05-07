@@ -241,7 +241,7 @@ class AdvertiserController extends AdminController {
 
         $this->fields = array(
             array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('id',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('legacyId',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
             array('status',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
             array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
             array('mc_url',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
@@ -622,6 +622,20 @@ class AdvertiserController extends AdminController {
             foreach ($m as $k=>$v) {
                 $member->{$k} = $v;
             }
+
+            if(!isset($member->status)){
+                $member->status = 'inactive';
+            }
+
+            if(!isset($member->url)){
+                $member->url = '';
+            }
+
+            $member->legacyId = new MongoInt32($m['id']);
+
+            $member->roleId = Prefs::getRoleId('Merchant');
+
+            $member->unset('id');
 
             $member->save();
 

@@ -6,6 +6,8 @@ return array(
     'invalidchars'=>array('%','&','|',' ','"',':',';','\'','\\','?','#','(',')','/'),
     'default_theme'=>'default',
 
+    'ci_key'=>'80553ddyM3m4n6708M4rk0T0B',
+
     'salutation'=>array(
             'Mr'=>'Mr',
             'Mrs'=>'Mrs',

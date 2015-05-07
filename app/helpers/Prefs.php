@@ -14,6 +14,27 @@ class Prefs {
 
     }
 
+    public static function hashcheck($in , $pass){
+
+        $hash = hash("haval256,5", Config::get('kickstart.ci_key') . $in);
+
+        if($hash == $pass){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public static function getRoleId($rolename){
+        $role = Role::where('rolename',$rolename)->first();
+        if($role){
+            return $role->_id;
+        }else{
+            return false;
+        }
+    }
+
     public static function getShopCategory(){
         $c = Shopcategory::get();
         self::$shopcategory = $c;

@@ -73,6 +73,18 @@ Route::group(array('prefix' => 'api/v1'), function (){
     Route::resource('asset', 'Api\AssetapiController');
 });
 
+Route::get('btest',function(){
+    $model = new Merchant();
+
+    $model = $model->where('id',245);
+    $model = $model->orWhere('username','like', '%Hastuti%');
+
+    $result = $model->get();
+
+    print_r($result->toArray());
+
+});
+
 Route::get('tonumber',function(){
     $property = new Property();
 
@@ -126,10 +138,21 @@ Route::get('syncmerchant', function(){
         $member->url = '';
         $member->legacyId = new MongoInt32($m['id']);
 
+        $member->roleId = Prefs::getRoleId('Merchant');
+
         $member->save();
 
     }
 
+});
+
+Route::get('addrole',function(){
+    $members = Member::get();
+
+    foreach($members as $m){
+        $m->roleId = Prefs::getRoleId('Merchant');
+        $m->save();
+    }
 });
 
 Route::get('impcat',function(){
@@ -410,7 +433,9 @@ Route::post('login',function(){
         // find the user
         $user = User::where($userfield, '=', Input::get('email'))->first();
 
-
+        $member = Member::where('email', '=', Input::get('email'))
+                        ->whereOr('fullname','=', Input::get('email'))
+                        ->first();
         // check if user exists
         if ($user) {
             // check if password is correct
@@ -420,6 +445,30 @@ Route::post('login',function(){
                 //exit();
                 // login the user
                 Auth::login($user);
+
+                return Redirect::to('/');
+
+            } else {
+                // validation not successful
+                // send back to form with errors
+                // send back to form with old input, but not the password
+                return Redirect::to('login')
+                    ->withErrors($validator)
+                    ->withInput(Input::except('password'));
+            }
+        } else if($member){
+
+            //print_r($member);
+
+            if (Prefs::hashcheck(Input::get('password'), $member->password )) {
+
+                //print $user->{$passwordfield};
+                //print_r($member);
+                //exit();
+                // login the user
+                Auth::login($member);
+
+                //print_r(Auth::user());
 
                 return Redirect::to('/');
 
@@ -450,10 +499,13 @@ Route::get('logout',function(){
 
 /* Filters */
 
-Route::filter('auth', function()
+Route::filter('jauth', function()
 {
+    //print_r(Auth::user());
 
-    if (Auth::guest()){
+    //exit();
+
+    if (!Auth::user()){
         Session::put('redirect',URL::full());
         return Redirect::to('login');
     }
