@@ -106,7 +106,7 @@
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-        {{ Former::textarea('shopDescription','Shop Description')->class('editor')->rows(10)->columns(20) }}
+        {{ Former::textarea('shopDescription','Shop Description or Promotion')->class('editor')->rows(10)->columns(20) }}
 
 
 
