@@ -66,6 +66,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    @include('layout.modaljs')
     @include('layout.js')
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     {{--

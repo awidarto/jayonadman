@@ -1,6 +1,4 @@
 
-    {{ HTML::script('js/bootstrap-modalmanager.js') }}
-    {{ HTML::script('js/bootstrap-modal.js') }}
 
     {{ HTML::script('js/jquery.removeWhitespace.min.js')}}
     {{ HTML::script('js/jquery.collagePlus.min.js')}}
