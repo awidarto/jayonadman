@@ -111,8 +111,6 @@ return array(
         'Former\FormerServiceProvider',
         'Intervention\Validation\ValidationServiceProvider',
         'Intervention\Image\ImageServiceProvider',
-        'Intervention\Helper\DateServiceProvider',
-        'Intervention\Helper\StringServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',
         'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
         'Barryvdh\Snappy\ServiceProvider',
@@ -120,7 +118,7 @@ return array(
         'Dinesh\Barcode\BarcodeServiceProvider',
         'SimpleSoftwareIO\QrCode\QrCodeServiceProvider',
         'Creitive\Breadcrumbs\BreadcrumbsServiceProvider',
-
+        'Pingpong\Auth2\Auth2ServiceProvider'
 	),
 
 	/*
@@ -189,8 +187,6 @@ return array(
 
         'Former'          => 'Former\Facades\Former',
         'Breadcrumbs'     => 'Creitive\Breadcrumbs\Facades\Breadcrumbs',
-        'Date'            => 'Intervention\Helper\Facades\Date',
-        'String'          => 'Intervention\Helper\Facades\String',
         'Image'           => 'Intervention\Image\Facades\Image',
         'Formgenerator'   => 'RobinMalfait\Formgenerator\Facades\Formgenerator',
         'Yaml'            => 'Pieter\Yaml\Facades\Yaml',
