@@ -611,7 +611,7 @@ class AdvertiserController extends AdminController {
 
         foreach($mymerchant->toArray() as $m){
 
-            $member = Member::where('legacyId',$m['id'])->first();
+            $member = Member::where('legacyId',intval($m['id']) )->first();
 
             if($member){
 
