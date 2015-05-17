@@ -609,11 +609,14 @@ class AdvertiserController extends AdminController {
 
         $count = 0;
 
+        /*
+
         $inactive = Member::where('status','inactive')->get();
 
         foreach ($inactive as $in) {
             $in->delete();
         }
+        */
 
 
         foreach($mymerchant->toArray() as $m){
