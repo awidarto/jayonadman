@@ -411,7 +411,7 @@ class AdvertiserController extends AdminController {
     public function postAdd($data = null)
     {
         $this->validator = array(
-            'shopDescription' => 'required'
+            //'shopDescription' => 'required'
         );
 
         return parent::postAdd($data);
@@ -420,7 +420,7 @@ class AdvertiserController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'shopDescription' => 'required'
+            //'shopDescription' => 'required'
         );
 
         //exit();
