@@ -6,7 +6,7 @@
         {{ Former::text('username','Username') }}
         {{ Former::text('email','Email') }}
 
-        {{ Former::password('pass','Password')->help('Leave blank for no changes') }}
+        {{ Former::password('password','Password')->help('Leave blank for no changes') }}
         {{ Former::password('repass','Repeat Password') }}
 
 

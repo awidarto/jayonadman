@@ -317,6 +317,15 @@ class AdvertiserController extends AdminController {
     public function beforeUpdate($id,$data)
     {
 
+        if(isset($data['password']) && $data['password'] != ''){
+            unset($data['repass']);
+            $data['password'] = Hash::make($data['password']);
+
+        }else{
+            unset($data['password']);
+            unset($data['repass']);
+        }
+
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $mediaindex = 0;
@@ -422,6 +431,15 @@ class AdvertiserController extends AdminController {
         $this->validator = array(
             //'shopDescription' => 'required'
         );
+
+        //print_r($data);
+
+        if($data['password'] == ''){
+            unset($data['password']);
+            unset($data['repass']);
+        }else{
+            $this->validator['pass'] = 'required|same:repass';
+        }
 
         //exit();
 
@@ -629,8 +647,18 @@ class AdvertiserController extends AdminController {
                 $member = new Member();
             }
 
+            $temp_pass = '';
+            if( isset($member->password) ){
+                $temp_pass = $member->password;
+            }
+
+
             foreach ($m as $k=>$v) {
                 $member->{$k} = $v;
+            }
+
+            if($temp_pass != ''){
+                $member->password = $temp_pass;
             }
 
             if(!isset($member->status)){

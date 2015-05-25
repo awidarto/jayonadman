@@ -1173,6 +1173,7 @@ class AdminController extends Controller {
 			unset($data['_id']);
 
 
+
             // process tags by default
             if(isset($data['tags'])){
                 $tags = $this->tagToArray($data['tags']);
