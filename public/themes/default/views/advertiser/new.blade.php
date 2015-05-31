@@ -106,7 +106,7 @@
 
         {{ Former::text('tags','Tags / Keywords')->class('tag_keyword') }}
 
-        {{ Former::textarea('shopDescription','Shop Description or Promotion')->class('editor')->rows(10)->columns(20) }}
+        {{ Former::textarea('shopDescription','Shop Description or Promotion')->id('descEditor')->class('editor')->rows(10)->columns(20) }}
 
 
 
@@ -129,13 +129,11 @@
 @stop
 
 @section('aux')
-{{ HTML::style('css/summernote.css') }}
-{{ HTML::style('css/summernote-bs3.css') }}
 
-{{ HTML::script('js/summernote.min.js') }}
+{{ HTML::script('ckeditor_full/ckeditor.js') }}
+
 
 <script type="text/javascript">
-
 
 $(document).ready(function() {
 
@@ -148,9 +146,7 @@ $(document).ready(function() {
         $('#permalink').val(slug);
     });
 
-    $('.editor').summernote({
-        height:500
-    });
+    CKEDITOR.replace( 'descEditor' );
 
     $('#location').on('change',function(){
         var location = $('#location').val();
