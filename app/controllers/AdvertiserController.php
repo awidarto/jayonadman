@@ -720,6 +720,12 @@ class AdvertiserController extends AdminController {
 
         $ps = Config::get('picture.sizes');
 
+        if(isset($data['useImage']) && $data['useImage'] == 'linked'){
+            $thumbnail_url = $data['extImageURL'];
+            $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id']));
+
+            return $display;
+        }
 
         if(isset($data['files']) && count($data['files']) > 0 ){
             $glinks = '';
@@ -749,6 +755,8 @@ class AdvertiserController extends AdminController {
             }else{
                 return $data['SKU'];
             }
+
+
         }else{
             return $data['SKU'];
         }
