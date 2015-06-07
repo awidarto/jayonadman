@@ -212,6 +212,15 @@ select.input-sm {
                                         {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector form-control input-sm select-'.$select_class,'id'=>$index ))}}
                                     </div>
                                 </td>
+                            @elseif(isset($in[1]['picture']) && is_array($in[1]['picture']))
+                                <td>
+                                    <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init form-control input-sm {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+                                    <div class="styled-select">
+                                        <?php $select_class = (isset($in[1]['class']))?$in[1]['class']:'filter' ?>
+                                        {{ Form::select('select_'.$in[0],$in[1]['picture'],null,array('class'=>'selector form-control input-sm select-'.$select_class,'id'=>$index ))}}
+                                    </div>
+                                </td>
+
                             @else
                                 <td>
                                     <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init form-control input-sm {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />

@@ -206,6 +206,7 @@ class AdvertiserController extends AdminController {
 
         $this->heads = array(
             array('Merchant Name',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
+            array('Logo',array('search'=>true,'sort'=>true ,'picture'=>Config::get('kickstart.default_picture_search'),'attr'=>array('class'=>'span2'))),
             array('Legacy ID',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Status',array('search'=>true,'sort'=>true ,'select'=>array(''=>'All','active'=>'Active','inactive'=>'Inactive') ,'attr'=>array('class'=>'span2'))),
             array('Category',array('search'=>true,'select'=>Prefs::getShopCategory()->shopcatToSelection('slug', 'name' ) ,'sort'=>true)),
@@ -241,6 +242,7 @@ class AdvertiserController extends AdminController {
 
         $this->fields = array(
             array('merchantname',array('kind'=>'text', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('id',array('kind'=>'picture', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('legacyId',array('kind'=>'numeric', 'query'=>'like','pos'=>'both','show'=>true)),
             array('status',array('kind'=>'text', 'query'=>'exact','pos'=>'after','show'=>true)),
             array('shopcategoryLink',array('kind'=>'text', 'callback'=>'catName' ,'query'=>'like','pos'=>'both','show'=>true)),
@@ -719,28 +721,34 @@ class AdvertiserController extends AdminController {
         $ps = Config::get('picture.sizes');
 
 
-        if(isset($data['files']) && count($data['files'])){
+        if(isset($data['files']) && count($data['files']) > 0 ){
             $glinks = '';
 
-            $gdata = $data['files'][$data['defaultpic']];
+            if(isset($data['files'][$data['defaultpic']]) ){
 
-            $thumbnail_url = $gdata['thumbnail_url'];
-            foreach($data['files'] as $g){
-                $g['caption'] = ( isset($g['caption']) && $g['caption'] != '')?$g['caption']:$data['SKU'];
-                $g['full_url'] = isset($g['full_url'])?$g['full_url']:$g['fileurl'];
-                foreach($ps as $k=>$s){
-                    if(isset($g[$k.'_url'])){
-                        $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$k.'" value="'.$g[$k.'_url'].'" />';
+                $gdata = $data['files'][$data['defaultpic']];
+
+                $thumbnail_url = $gdata['medium_url'];
+                foreach($data['files'] as $g){
+                    $g['caption'] = ( isset($g['caption']) && $g['caption'] != '')?$g['caption']:$data['SKU'];
+                    $g['medium_url'] = isset($g['medium_url'])?$g['medium_url']:$g['fileurl'];
+                    foreach($ps as $k=>$s){
+                        if(isset($g[$k.'_url'])){
+                            $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$k.'" value="'.$g[$k.'_url'].'" />';
+                        }
                     }
                 }
-            }
-            if(isset($data['useImage']) && $data['useImage'] == 'linked'){
-                $thumbnail_url = $data['extImageURL'];
-                $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+                if(isset($data['useImage']) && $data['useImage'] == 'linked'){
+                    $thumbnail_url = $data['extImageURL'];
+                    $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+                }else{
+                    $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+                }
+                return $display;
+
             }else{
-                $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
+                return $data['SKU'];
             }
-            return $display;
         }else{
             return $data['SKU'];
         }

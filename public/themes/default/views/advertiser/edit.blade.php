@@ -62,6 +62,18 @@
 
 @section('right')
         <h5>Shop Information</h5>
+
+        <h6>Upload Image</h6>
+        <?php
+            $fupload = new Fupload();
+        ?>
+        {{ $fupload->id('imageupload')->title('Select Logo Picture')->label('Upload Picture')
+            ->url('upload/logo')
+            ->singlefile(true)
+            ->prefix('logopic')
+            ->multi(false)->make($formdata) }}
+
+
         {{ Former::select('shopcategoryLink')->options(Prefs::getShopCategory()->shopcatToSelection('slug', 'name' ))->label('Shop Category') }}
 
         {{ Former::text('merchantname','Shop Name')->class('form-control') }}
@@ -114,16 +126,6 @@
         {{ Former::text('tags','Tags / Keywords')->class('tag_keyword') }}
 
         {{ Former::textarea('shopDescription','Shop Description or Promotion')->id('descEditor')->class('editor')->rows(10)->columns(20) }}
-
-        <h6>Upload Cover Image</h6>
-        <?php
-            $fupload = new Fupload();
-        ?>
-        {{ $fupload->id('imageupload')->title('Select Picture')->label('Upload Picture')
-            ->url('upload/asset')
-            ->singlefile(true)
-            ->prefix('asset')
-            ->multi(false)->make($formdata) }}
 
 
 @stop

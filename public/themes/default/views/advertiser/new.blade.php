@@ -57,6 +57,17 @@
 
 @section('right')
         <h5>Shop Information</h5>
+
+        <h6>Upload Image</h6>
+        <?php
+            $fupload = new Fupload();
+        ?>
+        {{ $fupload->id('imageupload')->title('Select Logo Picture')->label('Upload Picture')
+            ->url('upload/logo')
+            ->singlefile(true)
+            ->prefix('asset')
+            ->multi(false)->make($formdata) }}
+
         {{ Former::text('merchantname','Shop Name')->class('form-control') }}
 
         {{ Former::text('mc_url','Website URL')->class('form-control') }}

@@ -377,6 +377,236 @@ class UploadController extends Controller {
         return Response::JSON(array('status'=>$status,'role'=>'photo' ,'message'=>$message ,'files'=>$fileitems) );
     }
 
+
+    public function postLogo($ns = 'logopic')
+    {
+        $files = Input::file('files');
+
+        $file = $files[0];
+
+        //print_r($file);
+
+        //exit();
+
+        $large_wm = public_path().'/wm/wm_lrg.png';
+        $med_wm = public_path().'/wm/wm_med.png';
+        $sm_wm = public_path().'/wm/wm_sm.png';
+
+        $rstring = str_random(15);
+
+        $destinationPath = realpath('storage/media').'/'.$rstring;
+
+        $filename = $file->getClientOriginalName();
+        $filemime = $file->getMimeType();
+        $filesize = $file->getSize();
+        $extension =$file->getClientOriginalExtension(); //if you need extension of the file
+
+        $filename = str_replace(Config::get('kickstart.invalidchars'), '-', $filename);
+
+        $uploadSuccess = $file->move($destinationPath, $filename);
+
+
+        $is_image = $this->isImage($filemime);
+        $is_audio = $this->isAudio($filemime);
+        $is_video = $this->isVideo($filemime);
+        $is_pdf = $this->isPdf($filemime);
+
+        if(!($is_image || $is_audio || $is_video || $is_pdf)){
+            $is_doc = true;
+        }else{
+            $is_doc = false;
+        }
+
+        if($is_image){
+
+            $ps = Config::get('picture.sizes');
+
+            if($ps['thumbnail']['width'] == $ps['thumbnail']['height']){
+                $sqcanvas = Image::canvas(($ps['thumbnail']['width'] + 10) ,($ps['thumbnail']['height'] + 10) , '#FFFFFF');
+
+
+                $thsrc = Image::make($destinationPath.'/'.$filename)
+                    ->resize($ps['thumbnail']['width'],$ps['thumbnail']['height'], function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                $thumbnail = $sqcanvas->insert($thsrc, 'center')
+                    ->save($destinationPath.'/th_'.$filename);
+
+            }else{
+                $thumbnail = Image::make($destinationPath.'/'.$filename)
+                    ->fit($ps['thumbnail']['width'],$ps['thumbnail']['height'])
+                    //->insert($sm_wm,0,0, 'bottom-right')
+                    ->save($destinationPath.'/th_'.$filename);
+
+            }
+
+            if($ps['medium']['width'] == $ps['medium']['height']){
+
+
+
+                $medsrc = Image::make($destinationPath.'/'.$filename);
+
+                if($medsrc->width() >= $ps['medium']['width']){
+                    $mwidth = $ps['medium']['width'];
+                    $ratio = $ps['medium']['width']/$medsrc->width();
+                    $mheight = $medsrc->height() * $ratio;
+                }else{
+                    $mwidth = $ps['medium']['width'];
+                    $ratio = $medsrc->width() / $ps['medium']['width'];
+                    $mheight = $medsrc->height() * $ratio;
+                }
+
+                $medsrc->resize($mwidth,$mheight, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                $sqcanvas = Image::canvas(($mwidth + 10) ,($mheight + 10) , '#FFFFFF');
+
+                $medium = $sqcanvas->insert($medsrc, 'center')
+                    ->save($destinationPath.'/med_'.$filename);
+
+            }else{
+
+                $medsrc = Image::make($destinationPath.'/'.$filename);
+
+                if($medsrc->width() >= $ps['medium']['width']){
+                    $mwidth = $ps['medium']['width'];
+                    $ratio = $ps['medium']['width']/$medsrc->width();
+                    $mheight = $medsrc->height() * $ratio;
+                }else{
+                    $mwidth = $ps['medium']['width'];
+                    $ratio = $medsrc->width() / $ps['medium']['width'];
+                    $mheight = $medsrc->height() * $ratio;
+                }
+
+                $medsrc->resize($mwidth,$mheight, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                $sqcanvas = Image::canvas(($mwidth + 10) ,($mheight + 10) , '#FFFFFF');
+
+                $medium = $sqcanvas->insert($medsrc, 'center')
+                    ->save($destinationPath.'/med_'.$filename);
+
+                /*
+                $medium = Image::make($destinationPath.'/'.$filename)
+                    ->fit($ps['medium']['width'],$ps['medium']['height'])
+                    ->save($destinationPath.'/med_'.$filename);
+                */
+            }
+
+
+            if($ps['medium_portrait']['width'] == $ps['medium_portrait']['height']){
+
+                $sqcanvas = Image::canvas(($ps['medium_portrait']['width'] + 10) ,($ps['medium_portrait']['height'] + 10) , '#FFFFFF');
+
+
+                $medsrc = Image::make($destinationPath.'/'.$filename)
+                    ->resize($ps['medium_portrait']['width'],$ps['medium_portrait']['height'], function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                $medium_portrait = $sqcanvas->insert($medsrc, 'center')
+                    ->save($destinationPath.'/med_port_'.$filename);
+
+            }else{
+                $medium_portrait = Image::make($destinationPath.'/'.$filename)
+                    ->fit($ps['medium_portrait']['width'],$ps['medium_portrait']['height'])
+                    ->save($destinationPath.'/med_port_'.$filename);
+
+            }
+
+            if($ps['large']['width'] == $ps['large']['height']){
+
+                $sqcanvas = Image::canvas(($ps['large']['width'] + 10) ,($ps['large']['height'] + 10) , '#FFFFFF');
+
+
+                $lrgsrc = Image::make($destinationPath.'/'.$filename)
+                    ->resize($ps['large']['width'],$ps['large']['height'], function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                $large = $sqcanvas->insert($lrgsrc, 'center')
+                    ->save($destinationPath.'/med_'.$filename);
+
+            }else{
+                $large = Image::make($destinationPath.'/'.$filename)
+                    ->fit($ps['large']['width'],$ps['large']['height'])
+                    //->insert($large_wm, 'bottom-right',15,15)
+                    ->save($destinationPath.'/lrg_'.$filename);
+            }
+
+
+            $full = Image::make($destinationPath.'/'.$filename)
+                //->insert($large_wm, 'bottom-right',15,15)
+                ->save($destinationPath.'/full_'.$filename);
+
+            $image_size_array = array(
+                'thumbnail_url'=> URL::to('storage/media/'.$rstring.'/'.$ps['thumbnail']['prefix'].$filename),
+                'large_url'=> URL::to('storage/media/'.$rstring.'/'.$ps['large']['prefix'].$filename),
+                'medium_url'=> URL::to('storage/media/'.$rstring.'/'.$ps['medium']['prefix'].$filename),
+                'full_url'=> URL::to('storage/media/'.$rstring.'/'.$ps['full']['prefix'].$filename),
+            );
+
+            $status = 'OK';
+            $message = '';
+        }else{
+
+            $file_url = URL::to('storage/media/'.$rstring.'/'.$filename);
+
+            if($is_audio){
+                $thumbnail_url = View::make('media.audio')->with('title',$filename)->with('artist','-')->with('source',$file_url);
+            }elseif($is_video){
+                $thumbnail_url = URL::to('images/video.png');
+            }else{
+                $thumbnail_url = URL::to('images/media.png');
+            }
+
+            $image_size_array = array(
+                'thumbnail_url'=> $thumbnail_url,
+                'large_url'=> '',
+                'medium_url'=> '',
+                'full_url'=> ''
+            );
+
+            $status = 'ERR';
+            $message = 'Please upload picture file only';
+        }
+
+
+        $fileitems = array();
+
+        if($uploadSuccess){
+            $item = array(
+                    'ns'=>$ns,
+                    'role'=>'photo',
+                    'url'=> URL::to('storage/media/'.$rstring.'/'.$filename),
+                    'temp_dir'=> $destinationPath,
+                    'file_id'=> $rstring,
+                    'is_image'=>$is_image,
+                    'is_audio'=>$is_audio,
+                    'is_video'=>$is_video,
+                    'is_pdf'=>$is_pdf,
+                    'is_doc'=>$is_doc,
+                    'name'=> $filename,
+                    'type'=> $filemime,
+                    'size'=> $filesize,
+                    'delete_url'=> URL::to('storage/media/'.$rstring.'/'.$filename),
+                    'delete_type'=> 'DELETE'
+                );
+
+            foreach($image_size_array as $k=>$v){
+                $item[$k] = $v;
+            }
+
+            $fileitems[] = $item;
+
+        }
+
+        return Response::JSON(array('status'=>$status,'role'=>'photo' ,'message'=>$message ,'files'=>$fileitems) );
+    }
+
     public function postCover()
     {
         $files = Input::file('files');
